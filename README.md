@@ -1,6 +1,6 @@
 # xcl-museui
 
-> A Vue.js project
+> A Vue.js project for 58xcl.com 
 
 ## Build Setup
 

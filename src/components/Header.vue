@@ -7,7 +7,7 @@
 </mu-appbar>
 <mu-drawer :open="open" :docked="docked" @close="toggle()">
 <mu-list @itemClick="docked ? '' : toggle()">
-  <mu-auto-complete hintText="请输入关键词" @input="handleInput" :dataSource="dataSource" @change="handlechange"  filter="noFilter"/>
+  <mu-auto-complete label="请输入关键词" labelFloat  @input="handleInput" :dataSource="dataSource" @change="handlechange"  filter="noFilter"/>
 </mu-list>
 </mu-drawer>
 
