@@ -4,6 +4,7 @@
   <global-footer></global-footer>
     <mu-card>
     <mu-card-title :title="data.cn"/>
+    <mu-divider/>
     <mu-card-text>
         <p>备案证号：{{data.rn ? data.rn.replace('(备案号：','').replace(')','') : '--'}}</p>
         <p>核心人物：{{data.cp}}</p>

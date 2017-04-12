@@ -76,6 +76,16 @@ var API = {
   },
   fullTextSearch: function (kw, fn) {
     jsonp(SEARCH_URL + '?func=fullTextSearch&kw=' + kw + '&t=0&p=1&c=8', request, fn)
+  },
+  getSiMuWangProductInfoBySID: function (sid, fn) {
+    request.func = 'getSiMuWangProductInfoBySID'
+    request.params['psid'] = sid
+    jsonp(BASE_URL + '/datacapture?f=t', request, fn)
+  },
+  getPrivateFundGrade: function (sid, fn) {
+    request.func = 'getPrivateFundGrade'
+    request.params['sid'] = sid
+    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
   }
 }
 export default API

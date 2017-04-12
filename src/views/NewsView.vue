@@ -1,9 +1,10 @@
 <template>
-<div class="infinite-container center">
+<div class="infinite-container">
   <global-header></global-header>
   <global-footer></global-footer>
     <mu-circular-progress :size="30" v-show="loading"/>
     <h1 class="title-2">{{newsTitle}}</h1>
+    <mu-divider/>
     <div class="newsDesc" v-html="newsDesc">
     </div> 
 </div>

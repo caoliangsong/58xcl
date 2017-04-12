@@ -3,43 +3,44 @@
   <global-header></global-header>
   <global-footer></global-footer>
     <mu-card>
-    <mu-card-title title="山东信托-尊岳进取3号证券投资集" subTitle=""/>
+    <mu-card-title :title="data.pn" subTitle=""/>
+    <mu-icon-button  icon="grade" style="position:absolute;right:10px;top:12px;" />
+    <mu-divider/>
     <mu-card-text>
-        <p>备案证号：P585599</p>
-        <p>核心人物：张三</p>
-        <p>产品总数：20</p>
-        <p>成立日期：2012-05-06</p>
-        <p>所在地区：---</p>
-    </mu-card-text>
-    </mu-card>
+        <p>最新净值：{{data.nn}}</p>
+        <p>累计净值：{{data.tn}}</p>
+        <p>产品类型：{{data.ic1}}</p>
+        <p>成立日期：{{data.fd}}</p>
+        <p>产品状态：{{data.rs}}</p>
+    <mu-divider/>
+    <grade-bar :percent="gradeData.tr*20" theme="yellow" title="新策略评级"></grade-bar>
+    <grade-bar :percent="gradeData.nrr*20" theme="orange" title="抗风险"></grade-bar>
+    <grade-bar :percent="gradeData.cr*20" theme="yellow" title="持续性"></grade-bar>
+    <grade-bar :percent="gradeData.sr*20" theme="green" title="选股能力"></grade-bar>
+    <grade-bar :percent="gradeData.mtr*20" theme="blue" title="择时能力"></grade-bar>
+    <br />
+    <mu-divider/>
 
-    <mu-card>
-    <mu-card-header title="公司简介" subTitle="">
-    </mu-card-header>
+    <mu-sub-header>公司简介</mu-sub-header>
     <mu-card-text>
-        散落在指尖的阳光，我试着轻轻抓住光影的踪迹，它却在眉宇间投下一片淡淡的阴影。
-        调皮的阳光掀动了四月的心帘，温暖如约的歌声渐起。
-        似乎在诉说着，我也可以在漆黑的角落里，找到阴影背后的阳光，
-        找到阳光与阴影奏出和谐的旋律。我要用一颗敏感赤诚的心迎接每一缕滑过指尖的阳光！
+        {{data.cd || '--'}}
     </mu-card-text>
-    <mu-card-header title="投资理念" subTitle="">
-    </mu-card-header>
-    <mu-card-text>
-        散落在指尖的阳光，我试着轻轻抓住光影的踪迹，它却在眉宇间投下一片淡淡的阴影。
-        调皮的阳光掀动了四月的心帘，温暖如约的歌声渐起。
-        似乎在诉说着，我也可以在漆黑的角落里，找到阴影背后的阳光，
-        找到阳光与阴影奏出和谐的旋律。我要用一颗敏感赤诚的心迎接每一缕滑过指尖的阳光！
+        
     </mu-card-text>
     </mu-card>
+   
 </div>
 </template>
 <script>
 import GlobalFooter from '../components/Footer.vue'
 import GlobalHeader from '../components/Header.vue'
+import GradeBar from '../components/GradeBar.vue'
 import API from '../store/api'
 export default {
   data () {
     return {
+      data: {},
+      gradeData: {},
       list: [],
       loading: false
     }
@@ -51,9 +52,18 @@ export default {
     getData () {
       var _this = this
       _this.loading = true
-      API.SiMuWangCompanyByCompanySID(_this.$route.params.id, function (d) {
+      API.getSiMuWangProductInfoBySID(_this.$route.params.id, function (d) {
+        if (d.code === 200 && d.results && d.results.length > 0) {
+          _this.data = d.results[0]
+        } else {
+        }
+        _this.loading = false
+      })
+
+      API.getPrivateFundGrade(_this.$route.params.id, function (d) {
         if (d.code === 200 && d.results && d.results.length > 0) {
           console.log(d)
+          _this.gradeData = d.results[0]
         } else {
         }
         _this.loading = false
@@ -62,7 +72,8 @@ export default {
   },
   components: {
     GlobalFooter,
-    GlobalHeader
+    GlobalHeader,
+    GradeBar
   }
 }
 </script>
