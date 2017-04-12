@@ -1,7 +1,8 @@
 <template>
-<div class="infinite-container">
+<div class="container">
   <global-header :title="title"></global-header>
   <global-footer></global-footer>
+  <div class="infinite-container">
    <mu-table :fixedFooter="fixedFooter" :fixedHeader="fixedHeader"
     :enableSelectAll="enableSelectAll" :multiSelectable="multiSelectable"
     :selectable="selectable" :showCheckbox="showCheckbox">
@@ -22,6 +23,7 @@
   </mu-table>
 
   <mu-infinite-scroll :scroller="scroller" :loading="loading" @load="loadMore"/>
+  </div>
 </div>
 </template>
 <script>
@@ -45,7 +47,7 @@ export default {
     }
   },
   mounted () {
-    this.scroller = this.$el
+    this.scroller = document.querySelector('.infinite-container')
     this.getData(1)
   },
   methods: {

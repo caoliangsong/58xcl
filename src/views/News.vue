@@ -1,14 +1,16 @@
 <template>
-<div class="infinite-container">
+<div class="container">
   <global-header :title="title"></global-header>
   <global-footer></global-footer>
-  <mu-list>
-    <template v-for="item in list">
-      <mu-list-item class="maxlen" :title="item.t" :afterText="arrType[item.t1]" :href="'/#/news/'+item.id" />
-      <mu-divider/>
-    </template>
-  </mu-list>
-  <mu-infinite-scroll :scroller="scroller" :loading="loading" @load="loadMore"/>
+  <div class="infinite-container">
+    <mu-list>
+      <template v-for="item in list">
+        <mu-list-item class="maxlen" :title="item.t" :afterText="arrType[item.t1]" :href="'/#/news/'+item.id" />
+        <mu-divider/>
+      </template>
+    </mu-list>
+    <mu-infinite-scroll :scroller="scroller" :loading="loading" @load="loadMore"/>
+  </div>
 </div>
 </template>
 <script>
@@ -27,7 +29,7 @@ export default {
     }
   },
   mounted () {
-    this.scroller = this.$el
+    this.scroller = document.querySelector('.infinite-container')
     this.getData(1)
   },
   methods: {

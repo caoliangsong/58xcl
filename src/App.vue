@@ -10,27 +10,29 @@ export default {
 }
 </script>
 <style lang="less">
-#app {
-  #header,#footer{
-    position: fixed;
-    left: 0;
-    right: 0;
-    z-index: 999;
-    height: 50px;
-  }
-  #header{
-    top: 0;
-  }
-  #footer{
-    bottom: 0;
-  }
+#header,#footer{
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  height: 50px;
 }
+#header{
+  top: 0;
+}
+#footer{
+  bottom: 0;
+}
+
 .container{
-  position: fixed;
-  overflow: scroll;
-  top: 50px;
-  bottom: 50px;
-  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: scroll;
+  height: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .title-1{
@@ -54,9 +56,14 @@ export default {
 .center{
   text-align: center;
 }
-.infinite-container{
-  height: 600px;
-  overflow: auto;
+.infinite-container, .wrapper{
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 50px;
+  overflow-y: scroll;
+  height: auto;
   -webkit-overflow-scrolling: touch;
 }
 .maxlen{
@@ -69,6 +76,9 @@ export default {
     color:#333;
   }
 }
+a.green{
+  color:green;
+}
 .f14{
   font-size: 14px!important;
 }
@@ -78,6 +88,12 @@ export default {
 .input-wrapper{
   width: 90%;
   margin: 10px auto;
+}
+.mt20{
+  margin-top: 20px;
+}
+.t3{
+  color: #999;
 }
 </style>
 

@@ -1,18 +1,17 @@
 <template>
-<div class="infinite-container">
+<div class="container">
   <global-header></global-header>
   <global-footer></global-footer>
+  <div class="infinite-container">
     <mu-sub-header>股票型私募基金指数</mu-sub-header>
     <mu-content-block>
-      <div id="chart1"
-           style="height:200px;"></div>
+      <div id="chart1" style="height:200px;"></div>
     </mu-content-block>
     <mu-sub-header>期货型私募基金指数</mu-sub-header>
     <mu-content-block>
-      <div id="chart2"
-           style="height:200px;"></div>
+      <div id="chart2" style="height:200px;"></div>
     </mu-content-block>
-  
+</div>
   </div>
 </template>
 

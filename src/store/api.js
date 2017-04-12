@@ -86,6 +86,17 @@ var API = {
     request.func = 'getPrivateFundGrade'
     request.params['sid'] = sid
     jsonp(BASE_URL + '/datagrade?f=t', request, fn)
+  },
+  getProductNets: function (sid, fn) {
+    request.func = 'getProductNets'
+    request.params['sid'] = sid
+    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
+  },
+  getCSI: function (beginTime, endTime, fn) {
+    request.func = 'getCSI'
+    request.params['bt'] = beginTime
+    request.params['et'] = endTime
+    jsonp(BASE_URL + '/product?f=t', request, fn)
   }
 }
 export default API

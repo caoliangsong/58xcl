@@ -1,7 +1,8 @@
 <template>
-<div class="infinite-container">
+<div class="container">
   <global-header></global-header>
   <global-footer></global-footer>
+  <div class="infinite-container">
     <mu-card>
     <mu-card-title :title="data.cn"/>
     <mu-divider/>
@@ -37,6 +38,7 @@
         </mu-tbody>
       </mu-table>
     </mu-card>
+</div>
 </div>
 </template>
 <script>

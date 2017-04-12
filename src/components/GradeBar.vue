@@ -33,10 +33,11 @@ export default {
 @blue: #6DA4FF;
 @green:#11E2BB;
 @yellow:#FFD200;
+@default:#7E57C2;
 .mu-grade-bar{
   overflow: hidden;
-  margin: 10px 0 0 0;
   display: flex;
+  padding: 0 2em;
   .grade-bar-text{
     color: #666;
     text-align: right;
@@ -47,9 +48,9 @@ export default {
     height: 10px;
     margin-top:6px;
     width:70%;
-    background: #ccc;
+    background: lighten(@default, 30%);
     >div{
-      background: #000;
+      background: @default;
       height: 10px;
       -webkit-transition: width 1s;
       transition: width 1s;
