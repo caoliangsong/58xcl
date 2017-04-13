@@ -1,12 +1,12 @@
 <template>
 <div class="container">
-  <global-header :title="title"></global-header>
+  <global-header></global-header>
   <global-footer></global-footer>
   <div class="infinite-container">
     <mu-card>
       <mu-card-title :title="data.pn"
                      subTitle="" />
-      <!--<mu-icon-button  icon="grade" style="position:absolute;right:10px;top:12px;" />-->
+      <!--<mu-icon-button  icon="favorite" style="position:absolute;right:10px;top:12px;" />-->
       <mu-divider/>
       <mu-card-text style="line-height:1.8;">
         <mu-flexbox>
@@ -56,17 +56,16 @@
         <div id="chartGrade" style="height:200px;"></div>
              <div class="mt20"></div>
         <mu-divider/>
-       <div style="clear:both"></div>
+       
        <mu-sub-header>风险评估</mu-sub-header>
+       <div style="clear:both"></div>
         <mu-table :showCheckbox="showCheckbox">
-          <mu-thead slot="header">
-            <mu-tr>
-              <mu-th>区间段</mu-th>
-              <mu-th>区间收益</mu-th>
-              <mu-th>年华收益</mu-th>
-            </mu-tr>
-          </mu-thead>
           <mu-tbody>
+            <mu-tr>
+              <mu-td class="t3">区间段</mu-td>
+              <mu-td class="t3">区间收益</mu-td>
+              <mu-td class="t3">年化收益</mu-td>
+            </mu-tr>
             <mu-tr>
               <mu-td class="maxlen black-link">一年</mu-td>
               <mu-td class="maxlen"
@@ -120,17 +119,17 @@ export default {
       data: {},
       gradeData: {},
       list: [],
-      loading: false,
       showCheckbox: false
     }
   },
   mounted () {
+    var myChart = window.echarts.init(document.getElementById('chartGrade'))
+    myChart.showLoading({effect: 'whirling'})
     this.getData()
-    this.createChart()
+    this.createChart(myChart)
   },
   methods: {
-    initEcharts (id, date, data1, data2, legend) {
-      var myChart = window.echarts.init(document.getElementById(id))
+    initEcharts (myChart, date, data1, data2, legend) {
       legend = legend || ''
       var option = {
         backgroundColor: '#fff',
@@ -180,6 +179,7 @@ export default {
         }
       }
       myChart.setOption(option)
+      myChart.hideLoading()
     },
     colorNumber (num) {
       if (num >= 0) {
@@ -190,12 +190,10 @@ export default {
     },
     getData () {
       var _this = this
-      _this.loading = true
       API.getSiMuWangProductInfoBySID(_this.$route.params.id, function (d) {
         if (d.code === 200 && d.results && d.results.length > 0) {
           _this.data = d.results[0]
         }
-        _this.loading = false
       })
 
       API.getPrivateFundGrade(_this.$route.params.id, function (d) {
@@ -205,15 +203,15 @@ export default {
         _this.loading = false
       })
     },
-    createChart () {
+    createChart (myChart) {
       var _this = this
       var date = []
       var data1 = []
       var data2 = []
-
       API.getProductNets(_this.$route.params.id, function (d) {
         if (d.code === 200 && d.results && d.results.length > 0) {
-          API.getCSI(0, +new Date(), function (d2) {
+          // 限制时间段防止加载时间过长
+          API.getCSI(+new Date('2014-01-01'), +new Date(), function (d2) {
             for (var i = 0; i < d.results.length; i++) {
               for (var j = 0; j < d2.results.length; j++) {
                 if (d.results[i].ds === d2.results[j].rts.substring(0, 10)) {
@@ -230,7 +228,7 @@ export default {
             data2.forEach(function (item, index) {
               data2[index] = Math.round((item / data2[len - 1]) * 100) / 100
             })
-            _this.initEcharts('chartGrade', date, data1, data2, '当前基金')
+            _this.initEcharts(myChart, date, data1, data2, '当前基金')
           })
         }
       })

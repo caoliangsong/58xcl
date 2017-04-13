@@ -15,7 +15,6 @@ export default {
   left: 0;
   right: 0;
   z-index: 999;
-  height: 50px;
 }
 #header{
   top: 0;
@@ -58,10 +57,10 @@ export default {
 }
 .infinite-container, .wrapper{
   position: absolute;
-  top: 50px;
+  top: 56px;
   left: 0;
   right: 0;
-  bottom: 50px;
+  bottom: 56px;
   overflow-y: scroll;
   height: auto;
   -webkit-overflow-scrolling: touch;
@@ -94,6 +93,12 @@ a.green{
 }
 .t3{
   color: #999;
+}
+.global-left-bar{
+  position: absolute;
+  color: #fff;
+  z-index: 9999;
+  top: 4px;
 }
 </style>
 

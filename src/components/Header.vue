@@ -7,7 +7,7 @@
 </mu-appbar>
 <mu-drawer :open="open" :docked="docked" @close="toggle()">
 <mu-list @itemClick="docked ? '' : toggle()">
-  <mu-auto-complete label="请输入关键词" labelFloat  @input="handleInput" :dataSource="dataSource" @change="handlechange"  filter="noFilter"/>
+  <mu-auto-complete label="请输入基金关键词" labelFloat  @input="handleInput" :dataSource="dataSource" @change="handlechange"  filter="noFilter"/>
 </mu-list>
 </mu-drawer>
 
@@ -29,7 +29,7 @@ export default {
       links: [],
       open: false,
       docked: true,
-      showBackBtn: this.$route.name !== 'Index'
+      showBackBtn: ['Index', 'Grade', 'News', 'Exponent'].indexOf(this.$route.name) === -1
     }
   },
   methods: {

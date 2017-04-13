@@ -13,10 +13,10 @@ export default new Router({
       }
     },
     {
-      path: '/login',
-      name: 'Login',
+      path: '/exponent',
+      name: 'Exponent',
       component: function (resolve) {
-        require(['@/views/Login'], resolve)
+        require(['@/views/Exponent'], resolve)
       }
     },
     {

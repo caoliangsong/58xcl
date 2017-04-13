@@ -3,7 +3,7 @@
   <global-header :title="title"></global-header>
   <global-footer></global-footer>
   <div class="infinite-container">
-    <mu-circular-progress :size="30" v-show="loading"/>
+    <div class="center"><mu-circular-progress :size="30" v-show="loading"/></div>
     <h1 class="title-2">{{newsTitle}}</h1>
     <mu-divider/>
     <div class="newsDesc" v-html="newsDesc">
@@ -21,7 +21,8 @@ export default {
       newsTitle: '',
       arrType: ['', '', '私募观点', '研究报告', '私募动态', '走访报告', '大赛公告', '知识学堂', '基金要闻', '投资建议', '宏观观点'],
       loading: true,
-      newsDesc: ''
+      newsDesc: '',
+      title: ''
     }
   },
   mounted () {
@@ -34,6 +35,7 @@ export default {
       API.getJournalismtById(_this.$route.params.id, function (d) {
         if (d.code === 200 && d.results && d.results.length > 0) {
           _this.newsTitle = d.results[0].t
+          _this.title = _this.arrType[d.results[0].t1]
           _this.newsDesc = d.results[0].d
         } else {
         }

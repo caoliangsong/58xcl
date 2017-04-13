@@ -2,6 +2,15 @@
 <div class="container">
   <global-header :title="title"></global-header>
   <global-footer></global-footer>
+     <mu-icon-menu icon="more_vert" class="global-left-bar" @change="handleChange" :open="open" :value="value">
+      <mu-menu-item title="资讯首页" value="-1"/>
+      <mu-menu-item title="私募观点" value="2"/>
+      <mu-menu-item title="私募动态" value="4"/>
+      <mu-menu-item title="研究报告" value="3"/>
+      <mu-menu-item title="宏观观点" value="10"/>
+      <mu-menu-item title="基金要闻" value="8"/>
+      <mu-menu-item title="投资建议" value="9"/>
+    </mu-icon-menu>
   <div class="infinite-container">
     <mu-list>
       <template v-for="item in list">
@@ -22,10 +31,13 @@ export default {
     return {
       list: [],
       page: 1,
-      title: '资讯',
+      title: '资讯首页',
       arrType: ['', '', '私募观点', '研究报告', '私募动态', '走访报告', '大赛公告', '知识学堂', '基金要闻', '投资建议', '宏观观点'],
       loading: false,
-      scroller: null
+      scroller: null,
+      value: '-1',
+      open: false,
+      canloadmore: true
     }
   },
   mounted () {
@@ -33,20 +45,29 @@ export default {
     this.getData(1)
   },
   methods: {
-    loadMore () {
-      this.getData(++this.page)
+    handleChange (val) {
+      this.value = val
+      this.title = this.arrType[val]
+      this.list = []
+      this.canloadmore = true
+      this.getData(1, val)
     },
-    getData (p) {
+    loadMore () {
+      this.canloadmore && this.getData(++this.page, this.value)
+    },
+    getData (p, type) {
       var _this = this
       _this.loading = true
-      API.getJournalismtList(-1, p, 20, function (d) {
+      API.getJournalismtList(type || -1, p, 20, function (d) {
         if (d.code === 200 && d.results && d.results.length > 0) {
           _this.list = _this.list.concat(d.results)
           if (d.results.length < 20) {
             _this.list.push({t: '- END -'})
+            _this.canloadmore = false
           }
         } else {
           _this.list.push({t: '- END -'})
+          _this.canloadmore = false
         }
         _this.loading = false
       })

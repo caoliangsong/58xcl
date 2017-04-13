@@ -4,8 +4,8 @@
     <mu-bottom-nav :value="bottomNav" @change="handleChange">
         <mu-bottom-nav-item value="/" title="主页" icon="home"/>
         <mu-bottom-nav-item value="/grade" title="评级" icon="thumb_up"/>
+        <mu-bottom-nav-item value="/exponent" title="指数" icon="trending_up"/>
         <mu-bottom-nav-item value="/news" title="资讯" icon="receipt"/>
-        <mu-bottom-nav-item value="/account" title="我的" icon="account_box"/>
     </mu-bottom-nav>
   </mu-paper>
 </div>

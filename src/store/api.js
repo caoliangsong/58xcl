@@ -1,4 +1,5 @@
-const BASE_URL = 'http://172.17.18.132:8080/UserService'
+// const BASE_URL = 'http://172.17.18.132:8080/UserService'
+const BASE_URL = 'https://www.58xcl.com/ns'
 const SEARCH_URL = 'https://www.58xcl.com/qs/qs'
 
 var jsonp = function (url, data, success) {
