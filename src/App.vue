@@ -55,7 +55,7 @@ export default {
 .center{
   text-align: center;
 }
-.infinite-container, .wrapper{
+.infinite-container{
   position: absolute;
   top: 56px;
   left: 0;
@@ -65,7 +65,7 @@ export default {
   height: auto;
   -webkit-overflow-scrolling: touch;
 }
-.maxlen{
+.maxlen, .mu-item-title{
   overflow: hidden;
   text-overflow:ellipsis;
   white-space: nowrap;

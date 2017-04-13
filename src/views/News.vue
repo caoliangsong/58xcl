@@ -79,10 +79,3 @@ export default {
   }
 }
 </script>
-<style>
-.mu-item-title{
-  overflow: hidden;
-  text-overflow:ellipsis;
-  white-space: nowrap;
-}
-</style>

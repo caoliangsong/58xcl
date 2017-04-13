@@ -69,37 +69,37 @@
             <mu-tr>
               <mu-td class="maxlen black-link">一年</mu-td>
               <mu-td class="maxlen"
-                     v-html="colorNumber(gradeData.ir2)"></mu-td>
+                     v-html="_colorNumber(gradeData.ir2)"></mu-td>
               <mu-td class="maxlen"
-                     v-html="colorNumber(gradeData.yp)"></mu-td>
+                     v-html="_colorNumber(gradeData.yp)"></mu-td>
             </mu-tr>
             <mu-tr>
               <mu-td class="maxlen black-link">两年</mu-td>
               <mu-td class="maxlen"
-                     v-html="colorNumber(gradeData.tyir2)"></mu-td>
+                     v-html="_colorNumber(gradeData.tyir2)"></mu-td>
               <mu-td class="maxlen"
-                     v-html="colorNumber(gradeData.tyyp)"></mu-td>
+                     v-html="_colorNumber(gradeData.tyyp)"></mu-td>
             </mu-tr>
             <mu-tr>
               <mu-td class="maxlen black-link">今年以来</mu-td>
               <mu-td class="maxlen"
-                     v-html="colorNumber(gradeData.ftir)"></mu-td>
+                     v-html="_colorNumber(gradeData.ftir)"></mu-td>
               <mu-td class="maxlen"
-                     v-html="colorNumber(gradeData.ftyp)"></mu-td>
+                     v-html="_colorNumber(gradeData.ftyp)"></mu-td>
             </mu-tr>
             <mu-tr>
               <mu-td class="maxlen black-link">两年以来</mu-td>
               <mu-td class="maxlen"
-                     v-html="colorNumber(gradeData.ftir1)"></mu-td>
+                     v-html="_colorNumber(gradeData.ftir1)"></mu-td>
               <mu-td class="maxlen"
-                     v-html="colorNumber(gradeData.ftyp1)"></mu-td>
+                     v-html="_colorNumber(gradeData.ftyp1)"></mu-td>
             </mu-tr>
             <mu-tr>
               <mu-td class="maxlen black-link">成立以来</mu-td>
               <mu-td class="maxlen"
-                     v-html="colorNumber(gradeData.feir)"></mu-td>
+                     v-html="_colorNumber(gradeData.feir)"></mu-td>
               <mu-td class="maxlen"
-                     v-html="colorNumber(gradeData.feyp)"></mu-td>
+                     v-html="_colorNumber(gradeData.feyp)"></mu-td>
             </mu-tr>
           </mu-tbody>
         </mu-table>
@@ -122,14 +122,20 @@ export default {
       showCheckbox: false
     }
   },
+  watch: {
+    '$route': 'init'
+  },
   mounted () {
-    var myChart = window.echarts.init(document.getElementById('chartGrade'))
-    myChart.showLoading({effect: 'whirling'})
-    this.getData()
-    this.createChart(myChart)
+    this.init()
   },
   methods: {
-    initEcharts (myChart, date, data1, data2, legend) {
+    init () {
+      var myChart = window.echarts.init(document.getElementById('chartGrade'))
+      myChart.showLoading({effect: 'whirling'})
+      this.getData()
+      this.createChart(myChart)
+    },
+    _initEcharts (myChart, date, data1, data2, legend) {
       legend = legend || ''
       var option = {
         backgroundColor: '#fff',
@@ -181,11 +187,22 @@ export default {
       myChart.setOption(option)
       myChart.hideLoading()
     },
-    colorNumber (num) {
+    _colorNumber (num) {
       if (num >= 0) {
         return '<a>' + (num * 100).toFixed(2) + '%</a>'
       } else {
         return '<a class="green">' + (num * 100).toFixed(2) + '%</a>'
+      }
+    },
+    _getCsi (fn) {
+      var d = window.localStorage.getItem('_CSIDATA')
+      if (window.USE_CACHE && d) {
+        fn(window.JSON.parse(d))
+      } else {
+        API.getCSI(+new Date('2014-01-01'), +new Date(), function (d2) {
+          window.localStorage.setItem('_CSIDATA', window.JSON.stringify(d2))
+          fn(d2)
+        })
       }
     },
     getData () {
@@ -211,7 +228,7 @@ export default {
       API.getProductNets(_this.$route.params.id, function (d) {
         if (d.code === 200 && d.results && d.results.length > 0) {
           // 限制时间段防止加载时间过长
-          API.getCSI(+new Date('2014-01-01'), +new Date(), function (d2) {
+          _this._getCsi(function (d2) {
             for (var i = 0; i < d.results.length; i++) {
               for (var j = 0; j < d2.results.length; j++) {
                 if (d.results[i].ds === d2.results[j].rts.substring(0, 10)) {
@@ -222,13 +239,15 @@ export default {
               }
             }
             var len = data1.length
+            var temp1 = []
+            var temp2 = []
             data1.forEach(function (item, index) {
-              data1[index] = Math.round((item / data1[len - 1]) * 100) / 100
+              temp1[index] = Math.round((item / data1[len - 1]) * 100) / 100
             })
             data2.forEach(function (item, index) {
-              data2[index] = Math.round((item / data2[len - 1]) * 100) / 100
+              temp2[index] = Math.round((item / data2[len - 1]) * 100) / 100
             })
-            _this.initEcharts(myChart, date, data1, data2, '当前基金')
+            _this._initEcharts(myChart, date, temp1, temp2, '当前基金')
           })
         }
       })

@@ -9,6 +9,8 @@ import store from './store'
 
 Vue.use(MuseUI)
 Vue.config.productionTip = false
+/* csi300 cache enable */
+window.USE_CACHE = true
 /* eslint-disable no-new */
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
