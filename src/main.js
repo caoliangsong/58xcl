@@ -8,7 +8,7 @@ import 'muse-ui/dist/muse-ui.css'
 import store from './store'
 
 Vue.use(MuseUI)
-Vue.config.productionTip = false
+Vue.config.productionTip = true
 /* csi300 cache enable */
 window.USE_CACHE = true
 /* eslint-disable no-new */
@@ -23,7 +23,7 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else {
-    next() // 确保一定要调用 next()
+    next()
   }
 })
 new Vue({

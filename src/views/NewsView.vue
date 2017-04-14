@@ -46,23 +46,22 @@ export default {
     getData (p) {
       // 自动到顶部
       document.querySelector('.infinite-container').scrollTop = 0
-      var _this = this
-      _this.loading = true
-      API.getJournalismtById(_this.$route.params.id, function (d) {
+      this.loading = true
+      API.getJournalismtById(this.$route.params.id, d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
-          _this.newsTitle = d.results[0].t
-          _this.title = _this.arrType[d.results[0].t1]
-          _this.newsTime = (new Date(d.results[0].lmt)).toLocaleDateString().replace(/\//g, '-')
-          _this.newsDesc = d.results[0].d
-          API.getJournalismtList(d.results[0].t1, 1, 6, function (d2) {
+          this.newsTitle = d.results[0].t
+          this.title = this.arrType[d.results[0].t1]
+          this.newsTime = (new Date(d.results[0].lmt)).toLocaleDateString().replace(/\//g, '-')
+          this.newsDesc = d.results[0].d
+          API.getJournalismtList(d.results[0].t1, 1, 6, d2 => {
             if (d2.code === 200 && d2.results && d2.results.length > 0) {
-              _this.list = d2.results
+              this.list = d2.results
             }
-            _this.loading = false
+            this.loading = false
           })
         } else {
         }
-        _this.loading = false
+        this.loading = false
       })
     }
   },

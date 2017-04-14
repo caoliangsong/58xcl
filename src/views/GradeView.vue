@@ -68,38 +68,47 @@
             </mu-tr>
             <mu-tr>
               <mu-td class="maxlen black-link">一年</mu-td>
-              <mu-td class="maxlen"
-                     v-html="_colorNumber(gradeData.ir2)"></mu-td>
-              <mu-td class="maxlen"
-                     v-html="_colorNumber(gradeData.yp)"></mu-td>
+              <mu-td class="maxlen">
+                <color-number :num="gradeData.ir2"></color-number>
+              </mu-td><mu-td class="maxlen">
+                <color-number :num="gradeData.yp"></color-number>
+              </mu-td>
             </mu-tr>
             <mu-tr>
               <mu-td class="maxlen black-link">两年</mu-td>
-              <mu-td class="maxlen"
-                     v-html="_colorNumber(gradeData.tyir2)"></mu-td>
-              <mu-td class="maxlen"
-                     v-html="_colorNumber(gradeData.tyyp)"></mu-td>
+              <mu-td class="maxlen">
+                <color-number :num="gradeData.tyir2"></color-number>
+              </mu-td>
+              <mu-td class="maxlen">
+                <color-number :num="gradeData.tyyp"></color-number>
+              </mu-td>
             </mu-tr>
             <mu-tr>
               <mu-td class="maxlen black-link">今年以来</mu-td>
-              <mu-td class="maxlen"
-                     v-html="_colorNumber(gradeData.ftir)"></mu-td>
-              <mu-td class="maxlen"
-                     v-html="_colorNumber(gradeData.ftyp)"></mu-td>
+              <mu-td class="maxlen">
+                <color-number :num="gradeData.ftir"></color-number>
+              </mu-td>
+              <mu-td class="maxlen">
+                <color-number :num="gradeData.ftyp"></color-number>
+              </mu-td>
             </mu-tr>
             <mu-tr>
               <mu-td class="maxlen black-link">两年以来</mu-td>
-              <mu-td class="maxlen"
-                     v-html="_colorNumber(gradeData.ftir1)"></mu-td>
-              <mu-td class="maxlen"
-                     v-html="_colorNumber(gradeData.ftyp1)"></mu-td>
+              <mu-td class="maxlen">
+                <color-number :num="gradeData.ftir1"></color-number>
+              </mu-td>
+              <mu-td class="maxlen">
+                <color-number :num="gradeData.ftyp1"></color-number>
+              </mu-td>
             </mu-tr>
             <mu-tr>
               <mu-td class="maxlen black-link">成立以来</mu-td>
-              <mu-td class="maxlen"
-                     v-html="_colorNumber(gradeData.feir)"></mu-td>
-              <mu-td class="maxlen"
-                     v-html="_colorNumber(gradeData.feyp)"></mu-td>
+              <mu-td class="maxlen">
+                <color-number :num="gradeData.feir"></color-number>
+              </mu-td>
+              <mu-td class="maxlen">
+                <color-number :num="gradeData.feyp"></color-number>
+              </mu-td>
             </mu-tr>
           </mu-tbody>
         </mu-table>
@@ -112,6 +121,7 @@
 import GlobalFooter from '../components/Footer.vue'
 import GlobalHeader from '../components/Header.vue'
 import GradeBar from '../components/GradeBar.vue'
+import ColorNumber from '../components/ColorNumber.vue'
 import API from '../store/api'
 export default {
   data () {
@@ -187,13 +197,6 @@ export default {
       myChart.setOption(option)
       myChart.hideLoading()
     },
-    _colorNumber (num) {
-      if (num >= 0) {
-        return '<a>' + (num * 100).toFixed(2) + '%</a>'
-      } else {
-        return '<a class="green">' + (num * 100).toFixed(2) + '%</a>'
-      }
-    },
     _getCsi (fn) {
       var d = window.localStorage.getItem('_CSIDATA')
       if (window.USE_CACHE && d) {
@@ -206,29 +209,27 @@ export default {
       }
     },
     getData () {
-      var _this = this
-      API.getSiMuWangProductInfoBySID(_this.$route.params.id, function (d) {
+      API.getSiMuWangProductInfoBySID(this.$route.params.id, d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
-          _this.data = d.results[0]
+          this.data = d.results[0]
         }
       })
 
-      API.getPrivateFundGrade(_this.$route.params.id, function (d) {
+      API.getPrivateFundGrade(this.$route.params.id, d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
-          _this.gradeData = d.results[0]
+          this.gradeData = d.results[0]
         }
-        _this.loading = false
+        this.loading = false
       })
     },
     createChart (myChart) {
-      var _this = this
       var date = []
       var data1 = []
       var data2 = []
-      API.getProductNets(_this.$route.params.id, function (d) {
+      API.getProductNets(this.$route.params.id, d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
           // 限制时间段防止加载时间过长
-          _this._getCsi(function (d2) {
+          this._getCsi(d2 => {
             for (var i = 0; i < d.results.length; i++) {
               for (var j = 0; j < d2.results.length; j++) {
                 if (d.results[i].ds === d2.results[j].rts.substring(0, 10)) {
@@ -247,7 +248,7 @@ export default {
             data2.forEach(function (item, index) {
               temp2[index] = Math.round((item / data2[len - 1]) * 100) / 100
             })
-            _this._initEcharts(myChart, date, temp1, temp2, '当前基金')
+            this._initEcharts(myChart, date, temp1, temp2, '当前基金')
           })
         }
       })
@@ -256,7 +257,8 @@ export default {
   components: {
     GlobalFooter,
     GlobalHeader,
-    GradeBar
+    GradeBar,
+    ColorNumber
   }
 }
 </script>

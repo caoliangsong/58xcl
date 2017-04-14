@@ -1,19 +1,15 @@
 <template>
 <div id="header">
-<mu-appbar titleClass="center">
-    <div>{{title}}</div>
-    <mu-icon-button icon="arrow_back" slot="left" @click="back()" v-show="showBackBtn" style="position:absolute;"/>
-    <mu-icon-button icon="search" slot="right" @click="toggle()" style="position:absolute;right:10px;"/>
-</mu-appbar>
-<mu-drawer :open="open" :docked="docked" @close="toggle()">
-<mu-list @itemClick="docked ? '' : toggle()">
-  <mu-auto-complete label="请输入基金关键词" labelFloat  @input="handleInput" :dataSource="dataSource" @change="handlechange"  filter="noFilter"/>
-</mu-list>
-</mu-drawer>
-
+  <mu-appbar titleClass="center">
+      <div slot="default">{{title}}</div>
+      <mu-icon-button icon="arrow_back" slot="left" @click="back" v-if="showBackBtn" style="position:absolute;"/>
+      <mu-icon-button icon="search" slot="right" @click="toggle" style="position:absolute;right:10px;"/>
+  </mu-appbar>
+  <mu-drawer :open="open"  @close="toggle">
+        <mu-auto-complete label="请输入基金关键词" labelFloat  @input="handleInput" :dataSource="dataSource" @change="handlechange"  filter="noFilter"/>
+      </mu-drawer>
 </div>
 </template>
-
 <script>
 import API from '../store/api'
 export default {
@@ -28,18 +24,17 @@ export default {
       dataSource: [],
       links: [],
       open: false,
-      docked: true,
       showBackBtn: ['Index', 'Grade', 'News', 'Exponent'].indexOf(this.$route.name) === -1
     }
   },
   methods: {
     handlechange (val) {
       var _this = this
+      this.open = false
       this.$router.push('/grade/' + _this.links[_this.dataSource.indexOf(val)])
     },
-    toggle (flag) {
+    toggle () {
       this.open = !this.open
-      this.docked = !flag
     },
     back () {
       this.$router.back()

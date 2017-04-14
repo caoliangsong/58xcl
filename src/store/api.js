@@ -31,7 +31,7 @@ var request = {
   params: {}
 }
 
-var API = {
+const API = {
   getJournalismtList: function (type, page, countPerPage, fn) {
     request.func = 'getJournalismtList'
     request.params['t'] = type
@@ -98,6 +98,12 @@ var API = {
     request.params['bt'] = beginTime
     request.params['et'] = endTime
     jsonp(BASE_URL + '/product?f=t', request, fn)
+  },
+  getFundIndexByType: function (type, fn) {
+    request.func = 'getFundIndexByType'
+    request.params['t'] = type
+    request.params['g'] = 0
+    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
   }
 }
 export default API

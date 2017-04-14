@@ -21,11 +21,95 @@
     <mu-sub-header>股票型私募基金指数</mu-sub-header>
     <mu-content-block>
       <div id="chart1" style="height:200px;"></div>
+      <div class="mt20"></div>
+        <mu-flexbox>
+          <mu-flexbox-item>
+            <span class="t3">区间收益：</span>
+            <color-number :num="data1.ir2"></color-number>
+          </mu-flexbox-item>
+          <mu-flexbox-item>
+            <span class="t3">年化收益：</span>
+            <color-number :num="data1.yp"></color-number>
+          </mu-flexbox-item>
+        </mu-flexbox>
+        <mu-flexbox>
+          <mu-flexbox-item>
+            <span class="t3">最大回撤：</span>
+            <color-number :num="data1.md" :percent="false" :color="false"></color-number>
+          </mu-flexbox-item>
+          <mu-flexbox-item>
+            <span class="t3">最大回撤比：</span>
+            <color-number :num="data1.rtwdr" :percent="false" :color="false"></color-number>
+          </mu-flexbox-item>
+        </mu-flexbox>
+        <mu-flexbox>
+          <mu-flexbox-item>
+            <span class="t3">年化波动率：</span>
+            <color-number :num="data1.yf" :percent="false" :color="false"></color-number>
+          </mu-flexbox-item>
+          <mu-flexbox-item>
+            <span class="t3">下行波动率：</span>
+            <color-number :num="data1.dr" :percent="false" :color="false"></color-number>
+          </mu-flexbox-item>
+        </mu-flexbox>
+        <mu-flexbox>
+          <mu-flexbox-item>
+            <span class="t3">盈亏比：</span>
+            <color-number :num="data1.palr" :percent="false" :color="false"></color-number>
+          </mu-flexbox-item>
+          <mu-flexbox-item>
+            <span class="t3">夏普比率：</span>
+            <color-number :num="data1.s1" :percent="false" :color="false"></color-number>
+          </mu-flexbox-item>
+        </mu-flexbox>
+        <div class="mt20"></div>
     </mu-content-block>
      <mu-divider />
     <mu-sub-header>期货型私募基金指数</mu-sub-header>
     <mu-content-block>
       <div id="chart2" style="height:200px;"></div>
+      <div class="mt20"></div>
+        <mu-flexbox>
+          <mu-flexbox-item>
+            <span class="t3">区间收益：</span>
+            <color-number :num="data2.ir2"></color-number>
+          </mu-flexbox-item>
+          <mu-flexbox-item>
+            <span class="t3">年化收益：</span>
+            <color-number :num="data2.yp"></color-number>
+          </mu-flexbox-item>
+        </mu-flexbox>
+        <mu-flexbox>
+          <mu-flexbox-item>
+            <span class="t3">最大回撤：</span>
+            <color-number :num="data2.md" :percent="false" :color="false"></color-number>
+          </mu-flexbox-item>
+          <mu-flexbox-item>
+            <span class="t3">最大回撤比：</span>
+            <color-number :num="data2.rtwdr" :percent="false" :color="false"></color-number>
+          </mu-flexbox-item>
+        </mu-flexbox>
+        <mu-flexbox>
+          <mu-flexbox-item>
+            <span class="t3">年化波动率：</span>
+            <color-number :num="data2.yf" :percent="false" :color="false"></color-number>
+          </mu-flexbox-item>
+          <mu-flexbox-item>
+            <span class="t3">下行波动率：</span>
+            <color-number :num="data2.dr" :percent="false" :color="false"></color-number>
+          </mu-flexbox-item>
+        </mu-flexbox>
+        <mu-flexbox>
+          <mu-flexbox-item>
+            <span class="t3">盈亏比：</span>
+            <color-number :num="data2.palr" :percent="false" :color="false"></color-number>
+          </mu-flexbox-item>
+          <mu-flexbox-item>
+            <span class="t3">夏普比率：</span>
+            <color-number :num="data2.s1" :percent="false" :color="false"></color-number>
+          </mu-flexbox-item>
+        </mu-flexbox>
+        <div class="mt20"></div>
     </mu-content-block>
   </div>
 </div>
@@ -35,12 +119,15 @@
 import API from '../store/api'
 import GlobalFooter from '../components/Footer.vue'
 import GlobalHeader from '../components/Header.vue'
+import ColorNumber from '../components/ColorNumber.vue'
 export default {
   data () {
     return {
       list: [],
       value: 'simple1',
-      dialog: false
+      dialog: false,
+      data1: {},
+      data2: {}
     }
   },
   mounted () {
@@ -48,6 +135,8 @@ export default {
   },
   methods: {
     init () {
+      this.initBaseData()
+
       var myChart = window.echarts.init(document.getElementById('chart1'))
       myChart.showLoading({effect: 'whirling'})
       this.createChart(myChart, 1, '股票型')
@@ -109,12 +198,17 @@ export default {
       myChart.setOption(option)
       myChart.hideLoading()
     },
-    _colorNumber (num) {
-      if (num >= 0) {
-        return '<a>' + (num * 100).toFixed(2) + '%</a>'
-      } else {
-        return '<a class="green">' + (num * 100).toFixed(2) + '%</a>'
-      }
+    initBaseData () {
+      API.getFundIndexByType(1, d => {
+        if (d.code === 200 && d.results && d.results.length !== 0) {
+          this.data1 = d.results[0]
+        }
+      })
+      API.getFundIndexByType(2, d => {
+        if (d.code === 200 && d.results && d.results.length !== 0) {
+          this.data2 = d.results[0]
+        }
+      })
     },
     _getCsi (fn) {
       // cache csi300 data
@@ -129,14 +223,12 @@ export default {
       }
     },
     createChart (myChart, type, legend) {
-      var _this = this
       var date = []
       var data1 = []
       var data2 = []
-      API.getFundIndexBaseByType(type, function (d) {
+      API.getFundIndexBaseByType(type, d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
-          // 限制时间段防止加载时间过长
-          _this._getCsi(function (d2) {
+          this._getCsi(d2 => {
             for (var i = 0; i < d.results.length; i++) {
               for (var j = 0; j < d2.results.length; j++) {
                 if (d.results[i].rts.substring(0, 10) === d2.results[j].rts.substring(0, 10)) {
@@ -154,7 +246,7 @@ export default {
             data2.forEach(function (item, index) {
               temp2[index] = ((item / data2[0]) * 1000).toFixed(2)
             })
-            _this._initEcharts(myChart, date, temp1, temp2, legend)
+            this._initEcharts(myChart, date, temp1, temp2, legend)
           })
         }
       })
@@ -168,7 +260,8 @@ export default {
   },
   components: {
     GlobalFooter,
-    GlobalHeader
+    GlobalHeader,
+    ColorNumber
   }
 }
 </script>

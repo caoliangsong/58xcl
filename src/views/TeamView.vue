@@ -59,22 +59,21 @@ export default {
   },
   methods: {
     getData () {
-      var _this = this
-      var cid = _this.$route.params.id
-      _this.loading = true
-      API.SiMuWangCompanyByCompanySID(cid, function (d) {
+      var cid = this.$route.params.id
+      this.loading = true
+      API.SiMuWangCompanyByCompanySID(cid, d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
-          _this.data = d.results[0]
+          this.data = d.results[0]
         } else {
         }
-        _this.loading = false
+        this.loading = false
       })
-      API.getCompanyFundGrades(cid, function (d) {
+      API.getCompanyFundGrades(cid, d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
-          _this.list = d.results
+          this.list = d.results
         } else {
         }
-        _this.loading = false
+        this.loading = false
       })
     }
   },

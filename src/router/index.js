@@ -64,6 +64,12 @@ export default new Router({
       meta: { requiresAuth: true }
     },
     {
+      path: '/test',
+      component: function (resolve) {
+        require(['@/views/__Test'], resolve)
+      }
+    },
+    {
       path: '*',
       name: '404',
       component: function (resolve) {

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container">
+  <div id="app">
       <router-view></router-view>
   </div>
 </template>
@@ -96,8 +96,8 @@ a.green{
 }
 .global-left-bar{
   position: absolute;
-  color: #fff;
-  z-index: 9999;
+  color: #fff!important;
+  z-index: 99999;
   top: 4px;
 }
 </style>

@@ -3,6 +3,17 @@
   <global-header></global-header>
   <global-footer></global-footer>
   <div class="infinite-container">
+    <swipe class="my-swipe">
+      <swipe-item>
+        <a href="/#/grade"><img src="/static/banner02.png" /></a>
+      </swipe-item>
+      <swipe-item>
+        <a href="/#/exponent"><img src="/static/banner01.png" /></a>
+      </swipe-item>
+      <swipe-item>
+        <a href="/#/news"><img src="/static/banner03.png" /></a>
+      </swipe-item>
+    </swipe>
     <mu-sub-header>股票型私募基金指数</mu-sub-header>
     <mu-content-block>
       <div id="chart1" style="height:200px;"></div>
@@ -16,9 +27,11 @@
 </template>
 
 <script>
+require('vue-swipe/dist/vue-swipe.css')
 import API from '../store/api'
 import GlobalFooter from '../components/Footer.vue'
 import GlobalHeader from '../components/Header.vue'
+import { Swipe, SwipeItem } from 'vue-swipe'
 export default {
   data () {
     return {
@@ -98,10 +111,18 @@ export default {
   },
   components: {
     GlobalFooter,
-    GlobalHeader
+    GlobalHeader,
+    Swipe,
+    SwipeItem
   }
 }
 </script>
-<style>
-
+<style lang="less">
+.my-swipe {
+  height: 180px!important;
+  img{
+    width: 100%;
+    height: 180px;
+  }
+}
 </style>
