@@ -7,22 +7,22 @@
   <mu-drawer :open="open" :right="true" :docked="false" @close="toggleDrawer">
     <!--<mu-sub-header>基金筛选</mu-sub-header>-->
     <mu-content-block>
-    <mu-select-field v-model="game1" :labelFocusClass="['label-foucs']" label="综合评级">
+    <mu-select-field v-model="s1" :labelFocusClass="['label-foucs']" label="综合评级">
       <mu-menu-item v-for="text,index in selectList" :key="index" :value="index" :title="text" />
     </mu-select-field>
-    <mu-select-field v-model="game1" :labelFocusClass="['label-foucs']" label="收益评级">
+    <mu-select-field v-model="s2" :labelFocusClass="['label-foucs']" label="收益评级">
       <mu-menu-item v-for="text,index in selectList" :key="index" :value="index" :title="text" />
     </mu-select-field>
-    <mu-select-field v-model="game1" :labelFocusClass="['label-foucs']" label="一般风险">
+    <mu-select-field v-model="s3" :labelFocusClass="['label-foucs']" label="一般风险">
       <mu-menu-item v-for="text,index in selectList" :key="index" :value="index" :title="text" />
     </mu-select-field>
-    <mu-select-field v-model="game1" :labelFocusClass="['label-foucs']" label="极端风险">
+    <mu-select-field v-model="s4" :labelFocusClass="['label-foucs']" label="极端风险">
       <mu-menu-item v-for="text,index in selectList" :key="index" :value="index" :title="text" />
     </mu-select-field>
-    <mu-select-field v-model="game1" :labelFocusClass="['label-foucs']" label="基金类型">
-      <mu-menu-item v-for="text,index in selectList" :key="index" :value="index" :title="text" />
+    <mu-select-field v-model="s5" :labelFocusClass="['label-foucs']" label="基金类型">
+      <mu-menu-item v-for="text,index in selectListType" :key="index" :value="index" :title="text" />
     </mu-select-field>
-    <mu-flat-button primary label="确定"></mu-flat-button>
+    <mu-raised-button primary label="确定" fullWidth @click="submitFilter"></mu-raised-button>
     </mu-content-block>
   </mu-drawer>
   <div class="infinite-container">
@@ -66,8 +66,21 @@ export default {
       page: 1,
       open: false,
       selectList: [
-        '5星', '4星', '3星', '2星', '1星'
-      ]
+        '不限', '1星', '2星', '3星', '4星', '5星'
+      ],
+      selectListType: [
+        '不限', '股票型', '期货型'
+      ],
+      s1: 0,
+      s2: 0,
+      s3: 0,
+      s4: 0,
+      s5: 0,
+      togetherRating: -1,
+      incomeRating: -1,
+      normalRiskRating: -1,
+      extremeRiskRating: -1,
+      type: -1
     }
   },
   mounted () {
@@ -78,16 +91,28 @@ export default {
     toggleDrawer () {
       this.open = !this.open
     },
+    submitFilter () {
+      this.open = false
+      this.togetherRating = this.s1
+      this.incomeRating = this.s2
+      this.normalRiskRating = this.s3
+      this.extremeRiskRating = this.s4
+      this.type = this.s5
+      this.getData(1, true)
+    },
     loadMore () {
       this.getData(++this.page)
     },
-    getData (p) {
+    getData (p, isFilter) {
       this.loading = true
-      API.getFundGrades('', '', 0, -1, -1, -1, -1, -1, false, p, 20, '_togetherRating', d => {
+      API.getFundGrades('', '', 0, this.togetherRating, this.incomeRating, this.normalRiskRating, this.extremeRiskRating, this.type, false, p, 20, '_togetherRating', d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
-          this.list = this.list.concat(d.results)
+          if (isFilter) {
+            this.list = d.results
+          } else {
+            this.list = this.list.concat(d.results)
+          }
         } else {
-          this.list.push({t: '- END -'})
         }
         this.loading = false
       })
