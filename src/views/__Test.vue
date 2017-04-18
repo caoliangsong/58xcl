@@ -3,7 +3,7 @@
     <global-header></global-header>
     <global-footer></global-footer>
     <div class="infinite-container">
-    <mu-drawer :open="true" :right="true" :docked="false" ></mu-drawer>
+    
     </div>
   </div>
 </template>

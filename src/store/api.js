@@ -104,6 +104,16 @@ const API = {
     request.params['t'] = type
     request.params['g'] = 0
     jsonp(BASE_URL + '/datagrade?f=t', request, fn)
+  },
+  getSiMuWangManagerBySID: function (psid, fn) {
+    request.func = 'getSiMuWangManagerBySID'
+    request.params['psid'] = psid
+    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
+  },
+  SiMuWangCompanyBySID: function (psid, fn) {
+    request.func = 'SiMuWangCompanyBySID'
+    request.params['psid'] = psid
+    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
   }
 }
 export default API

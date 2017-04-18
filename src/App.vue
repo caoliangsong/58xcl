@@ -14,7 +14,6 @@ export default {
   position: absolute;
   left: 0;
   right: 0;
-  z-index: 999;
 }
 #header{
   top: 0;
@@ -91,6 +90,9 @@ a.green{
 .mt20{
   margin-top: 20px;
 }
+.pd20{
+  padding: 20px;
+}
 .t3{
   color: #999;
 }
@@ -99,6 +101,15 @@ a.green{
   color: #fff!important;
   z-index: 99999;
   top: 4px;
+}
+.no-data{
+  color: #ddd;
+  text-align: center;
+  padding: 40px 0 60px;
+}
+// rewrite
+.mu-thead, .mu-tr {
+    border-bottom: 1px solid rgba(0,0,0,0.06)!important;
 }
 </style>
 

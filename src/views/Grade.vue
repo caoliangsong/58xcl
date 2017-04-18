@@ -92,7 +92,7 @@ export default {
       this.open = !this.open
     },
     submitFilter () {
-      this.open = false
+      this.toggleDrawer()
       this.togetherRating = this.s1
       this.incomeRating = this.s2
       this.normalRiskRating = this.s3

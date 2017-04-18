@@ -3,7 +3,9 @@
   <global-header title="指数"></global-header>
   <global-footer></global-footer>
   <div class="infinite-container">
-    <mu-sub-header>新策略私募基金指数</mu-sub-header>
+    <mu-sub-header>
+      新策略私募基金指数 
+      </mu-sub-header>
     <mu-content-block>
           新策略私募基金系列指数于2016年6月1日正式发布，以综合反映中国私募基金市场的整体表现，为市场及投资者提供更丰富的基金业绩评价基准和基金投资参考依据...
           <mu-flat-button label="查看更多" primary @click="open"></mu-flat-button>
@@ -18,7 +20,9 @@
           </mu-dialog>
     </mu-content-block>
     <mu-divider />
-    <mu-sub-header>股票型私募基金指数</mu-sub-header>
+    <mu-sub-header>股票型私募基金指数
+      <exponent-bar :data="stockData"></exponent-bar>
+    </mu-sub-header>
     <mu-content-block>
       <div id="chart1" style="height:200px;"></div>
       <div class="mt20"></div>
@@ -65,7 +69,7 @@
         <div class="mt20"></div>
     </mu-content-block>
      <mu-divider />
-    <mu-sub-header>期货型私募基金指数</mu-sub-header>
+    <mu-sub-header>期货型私募基金指数<exponent-bar :data="futuresData"></exponent-bar></mu-sub-header>
     <mu-content-block>
       <div id="chart2" style="height:200px;"></div>
       <div class="mt20"></div>
@@ -120,6 +124,7 @@ import API from '../store/api'
 import GlobalFooter from '../components/Footer.vue'
 import GlobalHeader from '../components/Header.vue'
 import ColorNumber from '../components/ColorNumber.vue'
+import ExponentBar from '../components/ExponentBar.vue'
 export default {
   data () {
     return {
@@ -127,7 +132,17 @@ export default {
       value: 'simple1',
       dialog: false,
       data1: {},
-      data2: {}
+      data2: {},
+      stockData: {
+        addtion: 0,
+        pencent: 0,
+        v: 0
+      },
+      futuresData: {
+        addtion: 0,
+        pencent: 0,
+        v: 0
+      }
     }
   },
   mounted () {
@@ -226,6 +241,7 @@ export default {
       var date = []
       var data1 = []
       var data2 = []
+      var lastValue
       API.getFundIndexBaseByType(type, d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
           this._getCsi(d2 => {
@@ -246,11 +262,27 @@ export default {
             data2.forEach(function (item, index) {
               temp2[index] = ((item / data2[0]) * 1000).toFixed(2)
             })
+            if (type === 1) {
+              lastValue = d.results[d.results.length - 1]
+              this.stockData = {
+                addtion: lastValue.i.toFixed(2),
+                pencent: (lastValue.ip * 100).toFixed(2),
+                v: lastValue.v.toFixed(2)
+              }
+            } else if (type === 2) {
+              lastValue = d.results[d.results.length - 1]
+              this.futuresData = {
+                addtion: lastValue.i.toFixed(2),
+                pencent: (lastValue.ip * 100).toFixed(2),
+                v: lastValue.v.toFixed(2)
+              }
+            }
             this._initEcharts(myChart, date, temp1, temp2, legend)
           })
         }
       })
     },
+
     open () {
       this.dialog = true
     },
@@ -261,7 +293,8 @@ export default {
   components: {
     GlobalFooter,
     GlobalHeader,
-    ColorNumber
+    ColorNumber,
+    ExponentBar
   }
 }
 </script>

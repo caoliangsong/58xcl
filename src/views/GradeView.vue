@@ -8,7 +8,7 @@
                      subTitle="" />
       <!--<mu-icon-button  icon="favorite" style="position:absolute;right:10px;top:12px;" />-->
       <mu-divider/>
-      <mu-card-text style="line-height:1.8;">
+      <div class="pd20">
         <mu-flexbox>
           <mu-flexbox-item>
             <span class="t3">最新净值：</span>{{data.nn}}
@@ -33,7 +33,7 @@
             <span class="t3">资金规模：</span>{{data.is}}
           </mu-flexbox-item>
         </mu-flexbox>
-        <div class="mt20"></div>
+        </div>
         <mu-divider/>
         <div class="mt20"></div>
         <grade-bar :percent="gradeData.tr*20"
@@ -56,10 +56,9 @@
         <div id="chartGrade" style="height:200px;"></div>
              <div class="mt20"></div>
         <mu-divider/>
-       
        <mu-sub-header>风险评估</mu-sub-header>
        <div style="clear:both"></div>
-        <mu-table :showCheckbox="showCheckbox">
+        <mu-table :showCheckbox="false">
           <mu-tbody>
             <mu-tr>
               <mu-td class="t3">区间段</mu-td>
@@ -112,7 +111,51 @@
             </mu-tr>
           </mu-tbody>
         </mu-table>
-      </mu-card-text>
+
+        <mu-divider/>
+       <mu-sub-header>基金经理</mu-sub-header>
+       <mu-table :showCheckbox="false" v-if="managerData.mn">
+        <mu-tbody>
+          <mu-tr>
+            <mu-td colspan="3">{{managerData.mn}} <small class="t3">({{managerData.p}})</small></mu-td>
+          </mu-tr>
+          <mu-tr>
+            <mu-td><span class="t3">文化程度 </span>{{managerData.q}}</mu-td>
+            <mu-td><span class="t3">从业年限 </span>{{managerData.wy}}</mu-td>
+            <mu-td><span class="t3">从业背景 </span>{{managerData.wb}}</mu-td>
+          </mu-tr>
+          <mu-tr>
+            <mu-td><span class="t3">今年收益 </span>{{managerData.yai}}</mu-td>
+            <mu-td><span class="t3">累计收益 </span>{{managerData.tai}}</mu-td>
+            <mu-td><span class="t3">管理产品 </span>{{managerData.fn}}</mu-td>
+          </mu-tr>
+          <mu-tr>
+          <mu-td colspan="3" style="white-space:normal;line-height:2;padding:20px;">{{managerData.cd}}</mu-td>
+          </mu-tr>
+        </mu-tbody>
+       </mu-table>
+       <div class="no-data" v-else>暂无数据</div>
+
+       <mu-sub-header>基金公司</mu-sub-header>
+       <mu-table :showCheckbox="false" v-if="teamData.cn">
+        <mu-tbody>
+          <mu-tr>
+            <mu-td colspan="2">{{teamData.cn}}</mu-td>
+          </mu-tr>
+          <mu-tr>
+            <mu-td><span class="t3">备案证号 </span>{{teamData.fn}}</mu-td>
+            <mu-td><span class="t3">核心人物 </span>{{teamData.cp}}</mu-td>
+          </mu-tr>
+          <mu-tr>
+             <mu-td><span class="t3">产品总数 </span>{{teamData.ca}}</mu-td>
+            <mu-td><span class="t3">成立日期 </span>{{teamData.ed}}</mu-td>
+          </mu-tr>
+          <mu-tr>
+          <mu-td colspan="2" style="white-space:normal;line-height:2;padding:20px;">{{teamData.cd}}</mu-td>
+          </mu-tr>
+        </mu-tbody>
+       </mu-table>
+       <div class="no-data" v-else>暂无数据</div>
     </mu-card>
   </div>
   </div>
@@ -128,8 +171,9 @@ export default {
     return {
       data: {},
       gradeData: {},
-      list: [],
-      showCheckbox: false
+      managerData: {},
+      teamData: {},
+      list: []
     }
   },
   watch: {
@@ -144,6 +188,8 @@ export default {
       myChart.showLoading({effect: 'whirling'})
       this.getData()
       this.createChart(myChart)
+      this.getSiMuWangManagerBySID()
+      this.SiMuWangCompanyBySID()
     },
     _initEcharts (myChart, date, data1, data2, legend) {
       legend = legend || ''
@@ -165,7 +211,7 @@ export default {
         grid: {
           x: 40,
           y: 30,
-          x2: 2,
+          x2: 20,
           y2: 20
         },
         xAxis: [{
@@ -250,6 +296,20 @@ export default {
             })
             this._initEcharts(myChart, date, temp1, temp2, '当前基金')
           })
+        }
+      })
+    },
+    getSiMuWangManagerBySID () {
+      API.getSiMuWangManagerBySID(this.$route.params.id, d => {
+        if (d.code === 200 && d.results && d.results.length > 0) {
+          this.managerData = d.results[0]
+        }
+      })
+    },
+    SiMuWangCompanyBySID () {
+      API.SiMuWangCompanyBySID(this.$route.params.id, d => {
+        if (d.code === 200 && d.results && d.results.length > 0) {
+          this.teamData = d.results[0]
         }
       })
     }
