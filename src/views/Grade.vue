@@ -2,7 +2,7 @@
 <div class="container">
   <global-header :title="title"></global-header>
   <global-footer></global-footer>
-  <mu-icon-button icon="more_vert" class="global-left-bar" @click="toggleDrawer">
+  <mu-icon-button icon="filter_list" class="global-left-bar" @click="toggleDrawer">
   </mu-icon-button>
   <mu-drawer :open="open" :right="true" :docked="false" @close="toggleDrawer">
     <!--<mu-sub-header>基金筛选</mu-sub-header>-->

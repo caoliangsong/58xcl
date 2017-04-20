@@ -2,7 +2,7 @@
 <div class="container">
   <global-header :title="title"></global-header>
   <global-footer></global-footer>
-  <mu-icon-menu icon="more_vert" class="global-left-bar" @change="handleChange" :open="open" :value="value">
+  <mu-icon-menu icon="filter_list" class="global-left-bar" @change="handleChange" :open="open" :value="value">
     <mu-menu-item title="资讯首页" value="-1"/>
     <mu-menu-item title="私募观点" value="2"/>
     <mu-menu-item title="私募动态" value="4"/>

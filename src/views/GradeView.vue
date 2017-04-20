@@ -53,7 +53,7 @@
         <br />
         <mu-divider/>
         <mu-sub-header>净值走势</mu-sub-header>
-        <div id="chartGrade" style="height:200px;"></div>
+        <charts :data="stockData1" ></charts>
              <div class="mt20"></div>
         <mu-divider/>
        <mu-sub-header>风险评估</mu-sub-header>
@@ -165,6 +165,7 @@ import GlobalFooter from '../components/Footer.vue'
 import GlobalHeader from '../components/Header.vue'
 import GradeBar from '../components/GradeBar.vue'
 import ColorNumber from '../components/ColorNumber.vue'
+import Charts from '../components/Charts.vue'
 import API from '../store/api'
 export default {
   data () {
@@ -173,7 +174,8 @@ export default {
       gradeData: {},
       managerData: {},
       teamData: {},
-      list: []
+      list: [],
+      stockData1: {}
     }
   },
   watch: {
@@ -184,64 +186,10 @@ export default {
   },
   methods: {
     init () {
-      var myChart = window.echarts.init(document.getElementById('chartGrade'))
-      myChart.showLoading({effect: 'whirling'})
       this.getData()
-      this.createChart(myChart)
+      this.createChart()
       this.getSiMuWangManagerBySID()
       this.SiMuWangCompanyBySID()
-    },
-    _initEcharts (myChart, date, data1, data2, legend) {
-      legend = legend || ''
-      var option = {
-        backgroundColor: '#fff',
-        color: ['#8352F2', '#FF4081'],
-        legend: {
-          data: [legend, '沪深300']
-        },
-        tooltip: {
-          trigger: 'axis',
-          formatter: '{b0}<br/>{a0} : {c0}<br/>{a1} : {c1}'
-        },
-        dataZoom: {
-          show: false,
-          realtime: true,
-          start: 0
-        },
-        grid: {
-          x: 40,
-          y: 30,
-          x2: 20,
-          y2: 20
-        },
-        xAxis: [{
-          type: 'category',
-          data: date
-        }],
-        yAxis: [{
-          type: 'value',
-          axisLabel: {
-            formatter: '{value}'
-          }
-        }],
-        series: [
-          {
-            name: legend,
-            type: 'line',
-            data: data1
-          },
-          {
-            name: '沪深300',
-            type: 'line',
-            data: data2
-          }
-        ],
-        noDataLoadingOption: {
-          effect: 'whirling'
-        }
-      }
-      myChart.setOption(option)
-      myChart.hideLoading()
     },
     _getCsi (fn) {
       var d = window.localStorage.getItem('_CSIDATA')
@@ -268,7 +216,7 @@ export default {
         this.loading = false
       })
     },
-    createChart (myChart) {
+    createChart () {
       var date = []
       var data1 = []
       var data2 = []
@@ -294,7 +242,13 @@ export default {
             data2.forEach(function (item, index) {
               temp2[index] = Math.round((item / data2[len - 1]) * 100) / 100
             })
-            this._initEcharts(myChart, date, temp1, temp2, '当前基金')
+            this.stockData1 = {
+              date: date,
+              data1: temp1,
+              data2: temp2,
+              legend1: '当前基金',
+              legend2: '沪深300'
+            }
           })
         }
       })
@@ -318,7 +272,8 @@ export default {
     GlobalFooter,
     GlobalHeader,
     GradeBar,
-    ColorNumber
+    ColorNumber,
+    Charts
   }
 }
 </script>

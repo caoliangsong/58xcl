@@ -24,7 +24,7 @@
       <exponent-bar :data="stockData"></exponent-bar>
     </mu-sub-header>
     <mu-content-block>
-      <div id="chart1" style="height:200px;"></div>
+      <charts :data="stockData1" ></charts>
       <div class="mt20"></div>
         <mu-flexbox>
           <mu-flexbox-item>
@@ -71,7 +71,7 @@
      <mu-divider />
     <mu-sub-header>期货型私募基金指数<exponent-bar :data="futuresData"></exponent-bar></mu-sub-header>
     <mu-content-block>
-      <div id="chart2" style="height:200px;"></div>
+      <charts :data="stockData2" ></charts>
       <div class="mt20"></div>
         <mu-flexbox>
           <mu-flexbox-item>
@@ -125,6 +125,7 @@ import GlobalFooter from '../components/Footer.vue'
 import GlobalHeader from '../components/Header.vue'
 import ColorNumber from '../components/ColorNumber.vue'
 import ExponentBar from '../components/ExponentBar.vue'
+import Charts from '../components/Charts.vue'
 export default {
   data () {
     return {
@@ -133,6 +134,8 @@ export default {
       dialog: false,
       data1: {},
       data2: {},
+      stockData1: {},
+      stockData2: {},
       stockData: {
         addtion: 0,
         pencent: 0,
@@ -151,67 +154,8 @@ export default {
   methods: {
     init () {
       this.initBaseData()
-
-      var myChart = window.echarts.init(document.getElementById('chart1'))
-      myChart.showLoading({effect: 'whirling'})
-      this.createChart(myChart, 1, '股票型')
-      var myChart2 = window.echarts.init(document.getElementById('chart2'))
-      myChart2.showLoading({effect: 'whirling'})
-      this.createChart(myChart2, 2, '期货型')
-    },
-    _initEcharts (myChart, date, data1, data2, legend) {
-      legend = legend || ''
-      var option = {
-        backgroundColor: '#fff',
-        color: ['#8352F2', '#FF4081'],
-        legend: {
-          data: [legend, '沪深300']
-        },
-        tooltip: {
-          trigger: 'axis',
-          formatter: '{b0}<br/>{a0} : {c0}<br/>{a1} : {c1}'
-        },
-        dataZoom: {
-          show: false,
-          realtime: true,
-          start: 0
-        },
-        grid: {
-          x: 40,
-          y: 30,
-          x2: 2,
-          y2: 20
-        },
-        xAxis: [{
-          type: 'category',
-          data: date
-        }],
-        yAxis: [{
-          type: 'value',
-          axisLabel: {
-            formatter: '{value}'
-          },
-          max: 2700,
-          min: 1000
-        }],
-        series: [
-          {
-            name: legend,
-            type: 'line',
-            data: data1
-          },
-          {
-            name: '沪深300',
-            type: 'line',
-            data: data2
-          }
-        ],
-        noDataLoadingOption: {
-          effect: 'whirling'
-        }
-      }
-      myChart.setOption(option)
-      myChart.hideLoading()
+      this.createChart(1, '股票型')
+      this.createChart(2, '期货型')
     },
     initBaseData () {
       API.getFundIndexByType(1, d => {
@@ -237,7 +181,7 @@ export default {
         })
       }
     },
-    createChart (myChart, type, legend) {
+    createChart (type, legend) {
       var date = []
       var data1 = []
       var data2 = []
@@ -269,6 +213,13 @@ export default {
                 pencent: (lastValue.ip * 100).toFixed(2),
                 v: lastValue.v.toFixed(2)
               }
+              this.stockData1 = {
+                date: date,
+                data1: temp1,
+                data2: temp2,
+                legend1: legend,
+                legend2: '沪深300'
+              }
             } else if (type === 2) {
               lastValue = d.results[d.results.length - 1]
               this.futuresData = {
@@ -276,8 +227,14 @@ export default {
                 pencent: (lastValue.ip * 100).toFixed(2),
                 v: lastValue.v.toFixed(2)
               }
+              this.stockData2 = {
+                date: date,
+                data1: temp1,
+                data2: temp2,
+                legend1: legend,
+                legend2: '沪深300'
+              }
             }
-            this._initEcharts(myChart, date, temp1, temp2, legend)
           })
         }
       })
@@ -294,7 +251,8 @@ export default {
     GlobalFooter,
     GlobalHeader,
     ColorNumber,
-    ExponentBar
+    ExponentBar,
+    Charts
   }
 }
 </script>
