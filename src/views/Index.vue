@@ -27,7 +27,7 @@
 </template>
 
 <script>
-require('vue-swipe/dist/vue-swipe.css')
+import 'vue-swipe/dist/vue-swipe.css'
 import API from '../store/api'
 import GlobalFooter from '../components/Footer.vue'
 import GlobalHeader from '../components/Header.vue'
@@ -49,7 +49,7 @@ export default {
   methods: {
     getData (type, legend) {
       let _this = this
-      API.getFundIndexBaseByType(type, function (d) {
+      API.getFundIndexBaseByType(type, 0, 0, function (d) {
         if (d.code === 200 && d.results && d.results.length > 0) {
           var arrDate = []
           var arrData = []

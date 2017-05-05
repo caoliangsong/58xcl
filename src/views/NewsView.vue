@@ -13,7 +13,9 @@
     <mu-sub-header>更多相关资讯</mu-sub-header>
     <mu-list>
       <template v-for="item in list">
-        <mu-list-item class="maxlen" :title="item.t" :afterText="arrType[item.t1]" :href="'/#/news/'+item.id" />
+        <router-link :to="'/news/'+item.id">
+        <mu-list-item class="maxlen" :title="item.t" :afterText="arrType[item.t1]" />
+        </router-link>
         <mu-divider/>
       </template>
     </mu-list>

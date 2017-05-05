@@ -36,8 +36,8 @@
       </mu-thead>
       <mu-tbody>
         <mu-tr v-for="item,index in list"  :key="index" :selected="item.selected">
-          <mu-td class="maxlen black-link"><a :href="'/#/grade/'+item.sid">{{item.pn}}</a></mu-td>
-          <mu-td class="maxlen black-link"><a :href="'/#/team/'+item.csid">{{item.cn || '---'}}</a></mu-td>
+          <mu-td class="maxlen black-link"><router-link :to="'/grade/'+item.sid">{{item.pn}}</router-link></mu-td>
+          <mu-td class="maxlen black-link"><router-link :to="'/team/'+item.csid">{{item.cn || '---'}}</router-link></mu-td>
           <mu-td class="maxlen">
             <color-number :num="item.feyp"></color-number>
           </mu-td>

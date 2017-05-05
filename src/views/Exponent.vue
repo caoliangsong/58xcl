@@ -186,7 +186,7 @@ export default {
       var data1 = []
       var data2 = []
       var lastValue
-      API.getFundIndexBaseByType(type, d => {
+      API.getFundIndexBaseByType(type, 0, 0, d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
           this._getCsi(d2 => {
             for (var i = 0; i < d.results.length; i++) {
@@ -256,6 +256,3 @@ export default {
   }
 }
 </script>
-<style>
-
-</style>

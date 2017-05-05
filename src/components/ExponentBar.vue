@@ -41,7 +41,7 @@ export default {
 </script>
 <style lang="less">
 .mu-exponenetbar {
-  width: 170px;
+  width: 190px;
   border-radius: 4px;
   line-height: 20px;
   margin: 10px;

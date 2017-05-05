@@ -3,10 +3,10 @@ const BASE_URL = 'https://www.58xcl.com/ns'
 const SEARCH_URL = 'https://www.58xcl.com/qs/qs'
 
 var jsonp = function (url, data, success) {
-  data = encodeURIComponent(window.JSON.stringify(data))
   var jsonpCallback = 'jsonpCallback' + (new Date() * 1) + Math.floor(Math.random() * 10000)
   var script = document.createElement('script')
   var h = document.getElementsByTagName('head')[0]
+  data = encodeURIComponent(window.JSON.stringify(data))
   if (url.indexOf('?') > -1) {
     url += '&CallBack=' + jsonpCallback + '&data=' + data
   } else {
@@ -60,11 +60,6 @@ const API = {
     request.params['o'] = order
     jsonp(BASE_URL + '/datagrade?f=t', request, fn)
   },
-  getFundIndexBaseByType: function (type, fn) {
-    request.func = 'getFundIndexBaseByType'
-    request.params['t'] = type
-    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
-  },
   SiMuWangCompanyByCompanySID: function (sid, fn) {
     request.func = 'SiMuWangCompanyByCompanySID'
     request.params['csid'] = sid
@@ -103,6 +98,13 @@ const API = {
     request.func = 'getFundIndexByType'
     request.params['t'] = type
     request.params['g'] = 0
+    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
+  },
+  getFundIndexBaseByType: function (type, subType, grade, fn) {
+    request.func = 'getFundIndexBaseList'
+    request.params['t'] = type
+    request.params['st'] = subType
+    request.params['g'] = grade
     jsonp(BASE_URL + '/datagrade?f=t', request, fn)
   },
   getSiMuWangManagerBySID: function (psid, fn) {

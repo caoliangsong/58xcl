@@ -14,7 +14,10 @@
   <div class="infinite-container">
     <mu-list>
       <template v-for="item in list">
-        <mu-list-item class="maxlen" :title="item.t" :afterText="arrType[item.t1]" :href="'/#/news/'+item.id" />
+        <router-link :to="'/news/'+item.id">
+          <mu-list-item class="maxlen black-link" :title="item.t"  :afterText="arrType[item.t1]">
+          </mu-list-item>
+        </router-link>
         <mu-divider/>
       </template>
     </mu-list>
