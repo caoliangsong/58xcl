@@ -2,28 +2,30 @@
 const BASE_URL = 'https://www.58xcl.com/ns'
 const SEARCH_URL = 'https://www.58xcl.com/qs/qs'
 
-var jsonp = function (url, data, success) {
-  var jsonpCallback = 'jsonpCallback' + (new Date() * 1) + Math.floor(Math.random() * 10000)
-  var script = document.createElement('script')
-  var h = document.getElementsByTagName('head')[0]
-  data = encodeURIComponent(window.JSON.stringify(data))
-  if (url.indexOf('?') > -1) {
-    url += '&CallBack=' + jsonpCallback + '&data=' + data
-  } else {
-    url += '?CallBack=' + jsonpCallback + '&data=' + data
-  }
-  script.src = url
-  h.appendChild(script)
-  window[jsonpCallback] = window[jsonpCallback] || function (json) {
-    window[jsonpCallback] = undefined
-    try {
-      delete window[jsonpCallback]
-    } catch (e) {}
-    if (h) {
-      h.removeChild(script)
+var jsonp = function (url, data) {
+  return new window.Promise(function (resolve, reject) {
+    var jsonpCallback = 'jsonpCallback' + (new Date() * 1) + Math.floor(Math.random() * 10000)
+    var script = document.createElement('script')
+    var h = document.getElementsByTagName('head')[0]
+    data = encodeURIComponent(window.JSON.stringify(data))
+    if (url.indexOf('?') > -1) {
+      url += '&CallBack=' + jsonpCallback + '&data=' + data
+    } else {
+      url += '?CallBack=' + jsonpCallback + '&data=' + data
     }
-    success(json)
-  }
+    script.src = url
+    h.appendChild(script)
+    window[jsonpCallback] = window[jsonpCallback] || function (json) {
+      window[jsonpCallback] = undefined
+      try {
+        delete window[jsonpCallback]
+      } catch (e) {}
+      if (h) {
+        h.removeChild(script)
+      }
+      resolve(json)
+    }
+  })
 }
 
 var request = {
@@ -32,19 +34,19 @@ var request = {
 }
 
 const API = {
-  getJournalismtList: function (type, page, countPerPage, fn) {
+  getJournalismtList: function (type, page, countPerPage) {
     request.func = 'getJournalismtList'
     request.params['t'] = type
     request.params['p'] = page
     request.params['cpp'] = countPerPage
-    jsonp(BASE_URL + '/consult?f=t', request, fn)
+    return jsonp(BASE_URL + '/consult?f=t', request)
   },
-  getJournalismtById: function (id, fn) {
+  getJournalismtById: function (id) {
     request.func = 'getJournalismtById'
     request.params['id'] = id
-    jsonp(BASE_URL + '/consult?f=t', request, fn)
+    return jsonp(BASE_URL + '/consult?f=t', request)
   },
-  getFundGrades: function (investmentStrategy, productType, establishTime, togetherRating, incomeRating, normalRiskRating, extremeRiskRating, type, isAsc, page, countPerPage, order, fn) {
+  getFundGrades: function (investmentStrategy, productType, establishTime, togetherRating, incomeRating, normalRiskRating, extremeRiskRating, type, isAsc, page, countPerPage, order) {
     request.func = 'getFundGrades'
     request.params['is'] = investmentStrategy
     request.params['pt'] = productType
@@ -58,64 +60,64 @@ const API = {
     request.params['p'] = page
     request.params['cpp'] = countPerPage
     request.params['o'] = order
-    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
+    return jsonp(BASE_URL + '/datagrade?f=t', request)
   },
-  SiMuWangCompanyByCompanySID: function (sid, fn) {
+  SiMuWangCompanyByCompanySID: function (sid) {
     request.func = 'SiMuWangCompanyByCompanySID'
     request.params['csid'] = sid
-    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
+    return jsonp(BASE_URL + '/datagrade?f=t', request)
   },
-  getCompanyFundGrades: function (sid, fn) {
+  getCompanyFundGrades: function (sid) {
     request.func = 'getCompanyFundGrades'
     request.params['sid'] = sid
-    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
+    return jsonp(BASE_URL + '/datagrade?f=t', request)
   },
-  fullTextSearch: function (kw, fn) {
-    jsonp(SEARCH_URL + '?func=fullTextSearch&kw=' + kw + '&t=0&p=1&c=8', request, fn)
+  fullTextSearch: function (kw) {
+    return jsonp(SEARCH_URL + '?func=fullTextSearch&kw=' + kw + '&t=0&p=1&c=8', request)
   },
-  getSiMuWangProductInfoBySID: function (sid, fn) {
+  getSiMuWangProductInfoBySID: function (sid) {
     request.func = 'getSiMuWangProductInfoBySID'
     request.params['psid'] = sid
-    jsonp(BASE_URL + '/datacapture?f=t', request, fn)
+    return jsonp(BASE_URL + '/datacapture?f=t', request)
   },
-  getPrivateFundGrade: function (sid, fn) {
+  getPrivateFundGrade: function (sid) {
     request.func = 'getPrivateFundGrade'
     request.params['sid'] = sid
-    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
+    return jsonp(BASE_URL + '/datagrade?f=t', request)
   },
-  getProductNets: function (sid, fn) {
+  getProductNets: function (sid) {
     request.func = 'getProductNets'
     request.params['sid'] = sid
-    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
+    return jsonp(BASE_URL + '/datagrade?f=t', request)
   },
-  getCSI: function (beginTime, endTime, fn) {
+  getCSI: function (beginTime, endTime) {
     request.func = 'getCSI'
     request.params['bt'] = beginTime
     request.params['et'] = endTime
-    jsonp(BASE_URL + '/product?f=t', request, fn)
+    return jsonp(BASE_URL + '/product?f=t', request)
   },
-  getFundIndexByType: function (type, fn) {
+  getFundIndexByType: function (type) {
     request.func = 'getFundIndexByType'
     request.params['t'] = type
     request.params['g'] = 0
-    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
+    return jsonp(BASE_URL + '/datagrade?f=t', request)
   },
-  getFundIndexBaseByType: function (type, subType, grade, fn) {
+  getFundIndexBaseByType: function (type, subType, grade) {
     request.func = 'getFundIndexBaseList'
     request.params['t'] = type
     request.params['st'] = subType
     request.params['g'] = grade
-    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
+    return jsonp(BASE_URL + '/datagrade?f=t', request)
   },
-  getSiMuWangManagerBySID: function (psid, fn) {
+  getSiMuWangManagerBySID: function (psid) {
     request.func = 'getSiMuWangManagerBySID'
     request.params['psid'] = psid
-    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
+    return jsonp(BASE_URL + '/datagrade?f=t', request)
   },
-  SiMuWangCompanyBySID: function (psid, fn) {
+  SiMuWangCompanyBySID: function (psid) {
     request.func = 'SiMuWangCompanyBySID'
     request.params['psid'] = psid
-    jsonp(BASE_URL + '/datagrade?f=t', request, fn)
+    return jsonp(BASE_URL + '/datagrade?f=t', request)
   }
 }
 export default API

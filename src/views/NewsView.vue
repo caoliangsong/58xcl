@@ -12,7 +12,7 @@
     <mu-divider/>
     <mu-sub-header>更多相关资讯</mu-sub-header>
     <mu-list>
-      <template v-for="item in list">
+      <template v-for="item in list" :keys="item._id">
         <router-link :to="'/news/'+item.id">
         <mu-list-item class="maxlen" :title="item.t" :afterText="arrType[item.t1]" />
         </router-link>
@@ -49,13 +49,13 @@ export default {
       // 自动到顶部
       document.querySelector('.infinite-container').scrollTop = 0
       this.loading = true
-      API.getJournalismtById(this.$route.params.id, d => {
+      API.getJournalismtById(this.$route.params.id).then(d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
           this.newsTitle = d.results[0].t
           this.title = this.arrType[d.results[0].t1]
           this.newsTime = (new Date(d.results[0].lmt)).toLocaleDateString().replace(/\//g, '-')
           this.newsDesc = d.results[0].d
-          API.getJournalismtList(d.results[0].t1, 1, 6, d2 => {
+          API.getJournalismtList(d.results[0].t1, 1, 6).then(d2 => {
             if (d2.code === 200 && d2.results && d2.results.length > 0) {
               this.list = d2.results
             }

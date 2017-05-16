@@ -196,20 +196,20 @@ export default {
       if (window.USE_CACHE && d) {
         fn(window.JSON.parse(d))
       } else {
-        API.getCSI(+new Date('2014-01-01'), +new Date(), function (d2) {
+        API.getCSI(+new Date('2014-01-01'), +new Date()).then(function (d2) {
           window.localStorage.setItem('_CSIDATA', window.JSON.stringify(d2))
           fn(d2)
         })
       }
     },
     getData () {
-      API.getSiMuWangProductInfoBySID(this.$route.params.id, d => {
+      API.getSiMuWangProductInfoBySID(this.$route.params.id).then(d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
           this.data = d.results[0]
         }
       })
 
-      API.getPrivateFundGrade(this.$route.params.id, d => {
+      API.getPrivateFundGrade(this.$route.params.id).then(d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
           this.gradeData = d.results[0]
         }
@@ -220,7 +220,7 @@ export default {
       var date = []
       var data1 = []
       var data2 = []
-      API.getProductNets(this.$route.params.id, d => {
+      API.getProductNets(this.$route.params.id).then(d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
           // 限制时间段防止加载时间过长
           this._getCsi(d2 => {

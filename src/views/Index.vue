@@ -34,13 +34,16 @@
      <mu-list v-for="item,index in list" :key="index" class="no-padding">
       <mu-divider />
       <router-link :to="'/grade/'+item.sid">
-      <mu-list-item :title="item.pn" :describeText="(item.mn||'---')+' | '+ item.cn" describeTextClass="maxlen">
-        <div slot="leftAvatar" class="f16">{{index+1}}</div>
-        <div slot="right"><color-number :num="item.feyp"></color-number></div>
-      </mu-list-item>
+        <mu-list-item :title="item.pn" :describeText="(item.mn||'---')+' | '+ item.cn" describeTextClass="maxlen">
+          <div slot="leftAvatar" class="f16">{{index+1}}</div>
+          <div slot="right"><color-number :num="item.feyp"></color-number></div>
+        </mu-list-item>
       </router-link>
   </mu-list>
-    
+   <mu-divider />
+  <div class="center mt">
+     <router-link to="/grade"><mu-raised-button label="查看更多评级" /></router-link>
+  </div>
 </div>
   </div>
 </template>
@@ -81,7 +84,7 @@ export default {
     },
     getData (type, legend) {
       let _this = this
-      API.getFundIndexBaseByType(type, 0, 0, function (d) {
+      API.getFundIndexBaseByType(type, 0, 0).then((d) => {
         if (d.code === 200 && d.results && d.results.length > 0) {
           var arrDate = []
           var arrData = []
@@ -104,7 +107,7 @@ export default {
       })
     },
     getGrade () {
-      API.getFundGrades('', '', 0, 5, -1, -1, -1, -1, false, 1, 10, '_togetherRating', d => {
+      API.getFundGrades('', '', 0, 5, -1, -1, -1, -1, false, 1, 5, '_togetherRating').then(d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
           this.list = d.results
         }
@@ -153,5 +156,8 @@ export default {
 }
 .mu-item.show-right{
   padding-right:60px;
+}
+.mt {
+  margin: 1rem 0;
 }
 </style>

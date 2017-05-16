@@ -61,7 +61,7 @@ export default {
     },
     getData (p, type) {
       this.loading = true
-      API.getJournalismtList(type || -1, p, 20, d => {
+      API.getJournalismtList(type || -1, p, 20).then(d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
           this.list = this.list.concat(d.results)
           if (d.results.length < 20) {

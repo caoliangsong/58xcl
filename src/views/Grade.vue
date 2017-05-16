@@ -105,7 +105,7 @@ export default {
     },
     getData (p, isFilter) {
       this.loading = true
-      API.getFundGrades('', '', 0, this.togetherRating, this.incomeRating, this.normalRiskRating, this.extremeRiskRating, this.type, false, p, 20, '_togetherRating', d => {
+      API.getFundGrades('', '', 0, this.togetherRating, this.incomeRating, this.normalRiskRating, this.extremeRiskRating, this.type, false, p, 20, '_togetherRating').then(d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
           if (isFilter) {
             this.list = d.results

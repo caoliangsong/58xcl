@@ -4,7 +4,7 @@
     <input class="search-text" type="text" placeholder="搜索私募基金" @focus="handleFocus" @blur="handleBlur" @input="handleInput" v-model="searchText"/>
     <mu-icon value="search" class="search-icon" />
     <div class="search-list" v-show="showList">
-        <router-link :to="'/grade/'+item.url" class="maxlen" v-for="item in dataSource" :keys="item._id">{{item.v}}</router-link>
+        <router-link :to="'/grade/'+item.url" class="maxlen" v-for="index,item in dataSource" :keys="index">{{item.v}}</router-link>
     </div>
   </div>
    <div class="search-cover" v-show="!showIcon"></div>

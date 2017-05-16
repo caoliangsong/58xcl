@@ -158,12 +158,12 @@ export default {
       this.createChart(2, '期货型')
     },
     initBaseData () {
-      API.getFundIndexByType(1, d => {
+      API.getFundIndexByType(1).then(d => {
         if (d.code === 200 && d.results && d.results.length !== 0) {
           this.data1 = d.results[0]
         }
       })
-      API.getFundIndexByType(2, d => {
+      API.getFundIndexByType(2).then(d => {
         if (d.code === 200 && d.results && d.results.length !== 0) {
           this.data2 = d.results[0]
         }
@@ -175,7 +175,7 @@ export default {
       if (window.USE_CACHE && d) {
         fn(window.JSON.parse(d))
       } else {
-        API.getCSI(+new Date('2014-01-01'), +new Date(), function (d2) {
+        API.getCSI(+new Date('2014-01-01'), +new Date()).then(function (d2) {
           window.localStorage.setItem('_CSIDATA', window.JSON.stringify(d2))
           fn(d2)
         })
@@ -186,7 +186,7 @@ export default {
       var data1 = []
       var data2 = []
       var lastValue
-      API.getFundIndexBaseByType(type, 0, 0, d => {
+      API.getFundIndexBaseByType(type, 0, 0).then(d => {
         if (d.code === 200 && d.results && d.results.length > 0) {
           this._getCsi(d2 => {
             for (var i = 0; i < d.results.length; i++) {
