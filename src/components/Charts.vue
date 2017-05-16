@@ -50,7 +50,8 @@ export default {
         xAxis: {
           data: _this.data.date
         },
-        yAxis: {},
+        yAxis: {
+        },
         series: [{
           name: _this.data.legend1,
           type: 'line',

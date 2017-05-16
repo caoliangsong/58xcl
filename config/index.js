@@ -1,7 +1,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
-var subdir = 'dist'
-// var subdir = '58xcl'
+// var subdir = 'dist'
+var subdir = '58xcl'
 module.exports = {
   build: {
     env: require('./prod.env'),
