@@ -19,8 +19,12 @@ export default {
   },
   data () {
     return {
-      randomId: 'chart_' + (Date.now() + Math.ceil(Math.random() * 10000))
+      randomId: 'chart_' + (Date.now() + Math.ceil(Math.random() * 10000)),
+      instance: null
     }
+  },
+  amounted () {
+    this.instance.showLoading()
   },
   watch: {
     data () {
@@ -62,7 +66,6 @@ export default {
           data: _this.data.data2
         }]
       }
-      myChart.showLoading()
 
       if (this.data.data2 === undefined || this.data.data2.length === 0) {
         defaultOption.tooltip.formatter = '{a} {b} : {c}'
